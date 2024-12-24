@@ -9,6 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# local env files
+.env*
+
 # SonarQube
 .sonar/
 .scannerwork/
