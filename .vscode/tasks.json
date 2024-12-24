@@ -1,0 +1,72 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "command": "uv venv",
+      "problemMatcher": [],
+      "label": "shell: uv venv",
+      "detail": "uv venv",
+      "group": "build",
+    },
+    {
+      "type": "shell",
+      "command": "source .venv/Scripts/activate",
+      "problemMatcher": [],
+      "label": "shell: activate",
+      "detail": "source .venv/Scripts/activate",
+      "group": "build",
+    },
+    {
+      "type": "shell",
+      "command": "deactivate",
+      "problemMatcher": [],
+      "label": "shell: deactivate",
+      "detail": "deactivate",
+      "group": "build"
+    },
+    {
+      "type": "shell",
+      "command": "uv sync",
+      "problemMatcher": [],
+      "label": "shell: uv sync",
+      "detail": "uv sync",
+      "group": "build"
+    },
+    {
+      "type": "shell",
+      "command": "uv run fastapi dev src/app/main.py",
+      "problemMatcher": [],
+      "label": "shell: uv run fastapi dev src/app/main.py",
+      "detail": "uv run fastapi dev src/app/main.py",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "command": "ruff check",
+      "problemMatcher": [],
+      "label": "shell: ruff check",
+      "detail": "ruff check",
+      "group": "build"
+    },
+    {
+      "type": "shell",
+      "command": "ruff check --fix",
+      "problemMatcher": [],
+      "label": "shell: ruff check --fix",
+      "detail": "ruff check --fix",
+      "group": "build"
+    },
+    {
+      "type": "shell",
+      "command": "ruff format",
+      "problemMatcher": [],
+      "label": "shell: ruff format",
+      "detail": "ruff format",
+      "group": "build"
+    }
+  ]
+}
