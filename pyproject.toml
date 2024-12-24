@@ -7,3 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "fastapi[full]>=0.115.6",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = "."
+testpaths = "src/tests"
