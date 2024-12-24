@@ -12,6 +12,9 @@ dependencies = [
 lint = [
     "ruff>=0.8.4",
 ]
+dev = [
+    "pip>=24.3.1",
+]
 
 [tool.pytest.ini_options]
 pythonpath = "."
