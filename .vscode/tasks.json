@@ -67,6 +67,17 @@
       "label": "shell: ruff format",
       "detail": "ruff format",
       "group": "build"
+    },
+    {
+      "type": "shell",
+      "command": "pytest",
+      "problemMatcher": [],
+      "label": "shell: pytest",
+      "detail": "pytest",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
     }
   ]
 }
