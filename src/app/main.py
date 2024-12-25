@@ -16,6 +16,7 @@ app.include_router(
     responses={418: {"description": "I'm a teapot"}},
 )
 
+
 @app.get("/")
 async def root():
     return {"message": "Hello Bigger Applications!"}
