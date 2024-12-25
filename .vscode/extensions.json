@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "aaron-bond.better-comments",
+    "charliermarsh.ruff",
     "eamodio.gitlens",
     "sonarsource.sonarlint-vscode"
   ]
