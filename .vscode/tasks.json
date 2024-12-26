@@ -46,26 +46,26 @@
     },
     {
       "type": "shell",
-      "command": "ruff check",
+      "command": "uv ruff check",
       "problemMatcher": [],
-      "label": "shell: ruff check",
-      "detail": "ruff check",
+      "label": "shell: uv ruff check",
+      "detail": "uv ruff check",
       "group": "build"
     },
     {
       "type": "shell",
-      "command": "ruff check --fix",
+      "command": "uv ruff check --fix",
       "problemMatcher": [],
-      "label": "shell: ruff check --fix",
-      "detail": "ruff check --fix",
+      "label": "shell: uv ruff check --fix",
+      "detail": "uv ruff check --fix",
       "group": "build"
     },
     {
       "type": "shell",
-      "command": "ruff format",
+      "command": "uv ruff format",
       "problemMatcher": [],
-      "label": "shell: ruff format",
-      "detail": "ruff format",
+      "label": "shell: uv ruff format",
+      "detail": "uv ruff format",
       "group": "build"
     },
     {
