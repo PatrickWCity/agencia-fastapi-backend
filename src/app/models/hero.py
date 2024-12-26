@@ -70,18 +70,18 @@ class TeamPublicWithHeroes(TeamPublic):
 
 settings = Settings()
 
-engine = create_engine(
-    str(
-        MultiHostUrl.build(
-            scheme=settings.db_connection,
-            host=settings.db_host,
-            port=settings.db_port or None,
-            path=settings.db_database,
-            username=settings.db_username,
-            password=settings.db_password,
-        )
+url = str(
+    MultiHostUrl.build(
+        scheme=settings.db_connection,
+        host=settings.db_host,
+        port=settings.db_port or None,
+        path=settings.db_database,
+        username=settings.db_username,
+        password=settings.db_password,
     )
 )
+
+engine = create_engine(url)
 
 
 def create_db_and_tables():
