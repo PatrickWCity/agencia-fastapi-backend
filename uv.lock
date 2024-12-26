@@ -8,6 +8,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "alembic" },
     { name = "fastapi", extra = ["all"] },
+    { name = "mysqlclient" },
     { name = "pycamunda" },
     { name = "sqlmodel" },
 ]
@@ -27,6 +28,7 @@ test = [
 requires-dist = [
     { name = "alembic", specifier = ">=1.14.0" },
     { name = "fastapi", extras = ["all"], specifier = ">=0.115.6" },
+    { name = "mysqlclient", specifier = ">=2.2.6" },
     { name = "pycamunda", specifier = ">=0.6.1" },
     { name = "sqlmodel", specifier = ">=0.0.22" },
 ]
@@ -409,6 +411,16 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d6/54/cfe61301667036ec958cb99bd3efefba235e65cdeb9c84d24a8293ba1d90/mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba", size = 8729 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b3/38/89ba8ad64ae25be8de66a6d463314cf1eb366222074cfda9ee839c56a4b4/mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8", size = 9979 },
+]
+
+[[package]]
+name = "mysqlclient"
+version = "2.2.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7d/62/51fbcd851834c830c940ded80280f593bd031137603329dd89479c68c5be/mysqlclient-2.2.6.tar.gz", hash = "sha256:c0b46d9b78b461dbb62482089ca8040fa916595b1b30f831ebbd1b0a82b43d53", size = 91055 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f2/e0/d4806d4970136047ba247ad738d8d9e19655f114a91326fc790d86f4234e/mysqlclient-2.2.6-cp312-cp312-win_amd64.whl", hash = "sha256:e940b41d85dfd7b190fa47d52f525f878cfa203d4653bf6a35b271b3c3be125b", size = 207811 },
+    { url = "https://files.pythonhosted.org/packages/7f/92/9d67ec977119abf692429751b6ce5b84baef33cded260768d813e742be08/mysqlclient-2.2.6-cp313-cp313-win_amd64.whl", hash = "sha256:794857bce4f9a1903a99786dd29ad7887f45a870b3d11585b8c51c4a753c4174", size = 207806 },
 ]
 
 [[package]]
