@@ -12,6 +12,7 @@ currently being supported with security updates.
 
 | Database Version           | Supported          |
 | -------------------------- | ------------------ |
+| Microsoft SQL Server 2012+ | :white_check_mark: |
 | MySQL 5.6+ / MariaDB 10+   | :white_check_mark: |
 | PostgreSQL 9.6+            | :white_check_mark: |
 | SQLite 3.12+               | :white_check_mark: |
