@@ -10,6 +10,7 @@ dependencies = [
     "mysqlclient>=2.2.6",
     "psycopg2>=2.9.10",
     "pycamunda>=0.6.1",
+    "pyjwt[crypto]>=2.10.1",
     "pyodbc>=5.2.0",
     "sqlmodel>=0.0.22",
 ]
