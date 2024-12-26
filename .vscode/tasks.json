@@ -70,10 +70,10 @@
     },
     {
       "type": "shell",
-      "command": "pytest",
+      "command": "uv run pytest",
       "problemMatcher": [],
-      "label": "shell: pytest",
-      "detail": "pytest",
+      "label": "shell: uv run pytest",
+      "detail": "uv run pytest",
       "group": {
         "kind": "test",
         "isDefault": true
