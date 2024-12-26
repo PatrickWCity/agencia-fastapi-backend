@@ -28,6 +28,6 @@ To learn more about FastAPI, take a look at the following resources:
 
 You can check out [the FastAPI GitHub repository](https://github.com/fastapi/fastapi) - your feedback and contributions are welcome!
 
-## Deploy
+## Deploy on Docker
 
 Check out our [FastAPI deployment documentation](https://fastapi.tiangolo.com/deployment/#what-does-deployment-mean) for more details.
