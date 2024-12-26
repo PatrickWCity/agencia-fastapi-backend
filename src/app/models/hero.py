@@ -1,6 +1,9 @@
 from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, select
 
+from ..config import Settings
+from pydantic_core import MultiHostUrl
+
 
 class TeamBase(SQLModel):
     name: str = Field(index=True)
@@ -64,11 +67,20 @@ class TeamPublicWithHeroes(TeamPublic):
     heroes: list[HeroPublic] = []
 
 
-sqlite_file_name = "database.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+settings = Settings()
 
-connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
+engine = create_engine(
+    str(
+        MultiHostUrl.build(
+            scheme=settings.db_connection,
+            host=settings.db_host,
+            port=settings.db_port or None,
+            path=settings.db_database,
+            username=settings.db_username,
+            password=settings.db_password,
+        )
+    )
+)
 
 
 def create_db_and_tables():
