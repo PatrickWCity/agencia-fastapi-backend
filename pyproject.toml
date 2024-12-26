@@ -26,4 +26,7 @@ test = [
 
 [tool.pytest.ini_options]
 pythonpath = "."
-testpaths = "src/tests"
+testpaths = "tests"
+
+[tool.uv]
+default-groups = ["dev", "lint", "test"]
