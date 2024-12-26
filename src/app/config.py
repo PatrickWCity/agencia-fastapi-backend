@@ -8,6 +8,11 @@ class Settings(BaseSettings):
     admin_email: str
     items_per_user: int = 50
 
+    camunda_url: str = "http://localhost:8080/engine-rest"
+    camunda_user: str = "demo"
+    camunda_password: str = "demo"
+    camunda_tenant_id: int = None
+
     db_connection: str = "sqlite"
     db_host: str = ""
     db_port: int = None
