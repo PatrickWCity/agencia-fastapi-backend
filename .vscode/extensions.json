@@ -3,6 +3,7 @@
     "aaron-bond.better-comments",
     "charliermarsh.ruff",
     "eamodio.gitlens",
+    "johnpapa.vscode-peacock",
     "sonarsource.sonarlint-vscode"
   ]
 }
