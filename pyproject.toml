@@ -8,6 +8,7 @@ dependencies = [
     "alembic>=1.14.0",
     "fastapi[all]>=0.115.6",
     "mysqlclient>=2.2.6",
+    "psycopg2>=2.9.10",
     "pycamunda>=0.6.1",
     "sqlmodel>=0.0.22",
 ]
