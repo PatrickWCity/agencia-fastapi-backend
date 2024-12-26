@@ -7,7 +7,7 @@ from pydantic_core import MultiHostUrl
 
 
 class TeamBase(SQLModel):
-    name: str = Field(index=True)
+    name: str = Field(index=True, max_length=255)
     headquarters: str
 
 
@@ -32,7 +32,7 @@ class TeamUpdate(SQLModel):
 
 
 class HeroBase(SQLModel):
-    name: str = Field(index=True)
+    name: str = Field(index=True, max_length=255)
     secret_name: str
     age: int | None = Field(default=None, index=True)
 
