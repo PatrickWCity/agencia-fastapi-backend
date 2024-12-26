@@ -22,6 +22,7 @@ async def info(settings: Annotated[Settings, Depends(get_settings)]):
             "name": settings.app_name,
             "env": settings.app_env,
         },
+        "version": settings.version,
         "admin_email": settings.admin_email,
         "items_per_user": settings.items_per_user,
         "camunda": {

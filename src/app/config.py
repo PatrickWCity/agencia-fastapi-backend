@@ -7,6 +7,7 @@ class Settings(BaseSettings):
 
     admin_email: str
     items_per_user: int = 50
+    version: str = "0.1.0"
 
     camunda_url: str = "http://localhost:8080/engine-rest"
     camunda_user: str = "demo"
