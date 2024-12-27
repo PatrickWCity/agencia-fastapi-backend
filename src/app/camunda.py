@@ -9,9 +9,15 @@ url = settings.camunda_url
 
 
 def start_process_inst(
-    key: str, tenant_id: str = None, name: Union[str, list[str]] = None, value=None
+    key: str,
+    tenant_id: str = None,
+    business_key: str = None,
+    name: Union[str, list[str]] = None,
+    value=None,
 ):
-    start_instance = processdef.StartInstance(url=url, key=key, tenant_id=tenant_id)
+    start_instance = processdef.StartInstance(
+        url=url, key=key, tenant_id=tenant_id, business_key=business_key
+    )
     if type(name) is list:
         for name, value in zip(name, value):
             start_instance.add_variable(name=name, value=value)
