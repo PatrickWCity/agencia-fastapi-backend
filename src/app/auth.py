@@ -11,13 +11,13 @@ from fastapi.security import (
 from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
 from pydantic import BaseModel, ValidationError
+from .config import Settings
 
-# to get a string like this run:
-# openssl rand -hex 32
-SECRET_KEY = ""
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+settings = Settings()
 
+secret_key = settings.secret_key
+algorithm = settings.algorithm
+access_token_expire_minutes = settings.access_token_expire_minutes
 
 fake_users_db = {
     "johndoe": {
@@ -98,7 +98,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, secret_key, algorithm=algorithm)
     return encoded_jwt
 
 
@@ -115,7 +115,7 @@ async def get_current_user(
         headers={"WWW-Authenticate": authenticate_value},
     )
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, secret_key, algorithms=[algorithm])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
@@ -151,7 +151,7 @@ async def login_for_access_token(
     user = authenticate_user(fake_users_db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=access_token_expire_minutes)
     access_token = create_access_token(
         data={"sub": user.username, "scopes": form_data.scopes},
         expires_delta=access_token_expires,
