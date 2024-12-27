@@ -4,6 +4,7 @@
     "charliermarsh.ruff",
     "eamodio.gitlens",
     "johnpapa.vscode-peacock",
+    "ms-azuretools.vscode-docker",
     "sonarsource.sonarlint-vscode"
   ]
 }
