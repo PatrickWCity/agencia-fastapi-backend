@@ -1,4 +1,5 @@
 from pycamunda import processdef, processinst, task
+from typing import Union
 
 from .config import Settings
 
@@ -7,9 +8,14 @@ settings = Settings()
 url = settings.camunda_url
 
 
-def start_process_inst(key: str, tenant_id: str = None, name: str = None, value=None):
+def start_process_inst(
+    key: str, tenant_id: str = None, name: Union[str, list[str]] = None, value=None
+):
     start_instance = processdef.StartInstance(url=url, key=key, tenant_id=tenant_id)
-    if name is not None:
+    if type(name) is list:
+        for name, value in zip(name, value):
+            start_instance.add_variable(name=name, value=value)
+    elif name is not None:
         start_instance.add_variable(name=name, value=value)
     return {"status": start_instance()}
 
@@ -54,8 +60,13 @@ def get_task_by_task_id(task_id: str):
     return {"status": get_task()}
 
 
-def complete_task_by_task_id(task_id: str, name: str = None, value=None):
+def complete_task_by_task_id(
+    task_id: str, name: Union[str, list[str]] = None, value=None
+):
     complete_task = task.Complete(url=url, id_=task_id)
-    if name is not None:
+    if type(name) is list:
+        for name, value in zip(name, value):
+            complete_task.add_variable(name=name, value=value)
+    elif name is not None:
         complete_task.add_variable(name=name, value=value)
     return {"status": complete_task()}
