@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional, List
-
+from datetime import datetime
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -8,8 +8,11 @@ if TYPE_CHECKING:
 
 class HeroBase(SQLModel):
     name: str = Field(index=True, max_length=255)
-    secret_name: str
+    secret_name: str = Field(max_length=255)
     age: Optional[int] = Field(default=None, index=True)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: Optional[datetime]
+    deleted_at: Optional[datetime]
 
     team_id: Optional[int] = Field(default=None, foreign_key="team.id")
 
@@ -32,6 +35,10 @@ class HeroUpdate(SQLModel):
     name: Optional[str] = None
     secret_name: Optional[str] = None
     age: Optional[int] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    deleted_at: Optional[datetime] = None
+
     team_id: Optional[int] = None
 
 

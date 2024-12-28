@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional, List
-
+from datetime import datetime
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -8,7 +8,10 @@ if TYPE_CHECKING:
 
 class TeamBase(SQLModel):
     name: str = Field(index=True, max_length=255)
-    headquarters: str
+    headquarters: str = Field(max_length=255)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: Optional[datetime]
+    deleted_at: Optional[datetime]
 
 
 class Team(TeamBase, table=True):
@@ -29,6 +32,9 @@ class TeamUpdate(SQLModel):
     id: Optional[int] = None
     name: Optional[str] = None
     headquarters: Optional[str] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    deleted_at: Optional[datetime] = None
 
 
 class TeamPublicWithHeroes(TeamPublic):
