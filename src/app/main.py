@@ -6,6 +6,8 @@ from app.internal import admin
 from app.routers import items, users, heroes, teams
 
 from app.database import create_db_and_tables
+from app.models.user import User
+from app.models.item import Item
 from app.models.hero import Hero
 from app.models.team import Team
 
