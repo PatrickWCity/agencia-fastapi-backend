@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from functools import lru_cache
 
 
 class Settings(BaseSettings):
@@ -21,7 +22,7 @@ class Settings(BaseSettings):
     db_connection: str = "sqlite"
     db_host: str = ""
     db_port: int = None
-    db_database: str = "/database.db"
+    db_database: str = "database.db"
     db_username: str = ""
     db_password: str = ""
 
@@ -29,3 +30,11 @@ class Settings(BaseSettings):
         env_file=(".env.example", ".env.local", ".env"),
         extra="ignore",
     )
+
+
+@lru_cache
+def get_settings():
+    return Settings()
+
+
+settings = get_settings()
