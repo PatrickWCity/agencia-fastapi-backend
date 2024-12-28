@@ -1,37 +1,69 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlmodel import Session, select
 
-from ..dependencies import get_token_header
-
-router = APIRouter(
-    prefix="/items",
-    tags=["items"],
-    dependencies=[Depends(get_token_header)],
-    responses={404: {"description": "Not found"}},
+from app.database import get_session
+from app.models.item import (
+    Item,
+    ItemCreate,
+    ItemPublic,
+    ItemUpdate,
 )
 
-fake_items_db = {"plumbus": {"name": "Plumbus"}, "gun": {"name": "Portal Gun"}}
+router = APIRouter()
 
 
-@router.get("/")
-async def read_items():
-    return fake_items_db
+@router.post("/items/", response_model=ItemPublic, tags=["items"])
+def create_item(*, session: Session = Depends(get_session), item: ItemCreate):
+    db_item = Item.model_validate(item)
+    session.add(db_item)
+    session.commit()
+    session.refresh(db_item)
+    return db_item
 
 
-@router.get("/{item_id}")
-async def read_item(item_id: str):
-    if item_id not in fake_items_db:
+@router.get("/items/", response_model=list[ItemPublic], tags=["items"])
+def read_items(
+    *,
+    session: Session = Depends(get_session),
+    offset: int = 0,
+    limit: int = Query(default=100, le=100),
+):
+    items = session.exec(select(Item).offset(offset).limit(limit)).all()
+    return items
+
+
+@router.get("/items/{item_id}", response_model=ItemPublic, tags=["items"])
+def read_item(*, item_id: int, session: Session = Depends(get_session)):
+    item = session.get(Item, item_id)
+    if not item:
         raise HTTPException(status_code=404, detail="Item not found")
-    return {"name": fake_items_db[item_id]["name"], "item_id": item_id}
+    return item
 
 
-@router.put(
-    "/{item_id}",
-    tags=["custom"],
-    responses={403: {"description": "Operation forbidden"}},
-)
-async def update_item(item_id: str):
-    if item_id != "plumbus":
-        raise HTTPException(
-            status_code=403, detail="You can only update the item: plumbus"
-        )
-    return {"item_id": item_id, "name": "The great Plumbus"}
+@router.patch("/items/{item_id}", response_model=ItemPublic, tags=["items"])
+def update_item(
+    *,
+    session: Session = Depends(get_session),
+    item_id: int,
+    item: ItemUpdate,
+):
+    db_item = session.get(Item, item_id)
+    if not db_item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    item_data = item.model_dump(exclude_unset=True)
+    for key, value in item_data.items():
+        setattr(db_item, key, value)
+    session.add(db_item)
+    session.commit()
+    session.refresh(db_item)
+    return db_item
+
+
+@router.delete("/items/{item_id}", tags=["items"])
+def delete_item(*, session: Session = Depends(get_session), item_id: int):
+    item = session.get(Item, item_id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    session.delete(item)
+    session.commit()
+    return {"ok": True}
