@@ -5,6 +5,7 @@
     "eamodio.gitlens",
     "johnpapa.vscode-peacock",
     "ms-azuretools.vscode-docker",
+    "qwtel.sqlite-viewer",
     "sonarsource.sonarlint-vscode"
   ]
 }
