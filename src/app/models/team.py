@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -11,7 +11,7 @@ class TeamBase(SQLModel):
     headquarters: str = Field(
         max_length=255, description="The headquarters of the team"
     )
-    created_at: datetime = Field(default_factory=datetime.now)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: Optional[datetime]
     deleted_at: Optional[datetime]
 

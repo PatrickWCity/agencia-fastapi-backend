@@ -1,5 +1,5 @@
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
 
@@ -15,7 +15,7 @@ class UserBase(SQLModel):
         index=True, max_length=255, description="The full name of the user"
     )
     disabled: bool
-    created_at: datetime = Field(default_factory=datetime.now)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: Optional[datetime]
     deleted_at: Optional[datetime]
 

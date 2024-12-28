@@ -1,11 +1,11 @@
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlmodel import Field, SQLModel
 
 
 class ItemBase(SQLModel):
     name: str = Field(index=True, max_length=255, description="The name of the item")
-    created_at: datetime = Field(default_factory=datetime.now)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: Optional[datetime]
     deleted_at: Optional[datetime]
 
