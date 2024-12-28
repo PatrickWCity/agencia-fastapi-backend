@@ -4,7 +4,7 @@ from sqlmodel import Field, SQLModel
 
 
 class ItemBase(SQLModel):
-    name: str = Field(index=True, max_length=255)
+    name: str = Field(index=True, max_length=255, description="The name of the item")
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: Optional[datetime]
     deleted_at: Optional[datetime]

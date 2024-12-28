@@ -7,8 +7,10 @@ if TYPE_CHECKING:
 
 
 class TeamBase(SQLModel):
-    name: str = Field(index=True, max_length=255)
-    headquarters: str = Field(max_length=255)
+    name: str = Field(index=True, max_length=255, description="The name of the team")
+    headquarters: str = Field(
+        max_length=255, description="The headquarters of the team"
+    )
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: Optional[datetime]
     deleted_at: Optional[datetime]

@@ -7,9 +7,11 @@ if TYPE_CHECKING:
 
 
 class HeroBase(SQLModel):
-    name: str = Field(index=True, max_length=255)
-    secret_name: str = Field(max_length=255)
-    age: Optional[int] = Field(default=None, index=True)
+    name: str = Field(index=True, max_length=255, description="The name of the hero")
+    secret_name: str = Field(max_length=255, description="The secret name of the hero")
+    age: Optional[int] = Field(
+        default=None, index=True, description="The age of the hero"
+    )
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: Optional[datetime]
     deleted_at: Optional[datetime]

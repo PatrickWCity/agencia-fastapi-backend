@@ -1,12 +1,19 @@
 from typing import Optional
 from datetime import datetime
+from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
 
 
 class UserBase(SQLModel):
-    username: str = Field(index=True, max_length=255)
-    email: str = Field(index=True, max_length=255)
-    full_name: str = Field(index=True, max_length=255)
+    username: str = Field(
+        index=True, max_length=255, description="The username of the user"
+    )
+    email: EmailStr = Field(
+        index=True, max_length=255, description="The email of the user"
+    )
+    full_name: str = Field(
+        index=True, max_length=255, description="The full name of the user"
+    )
     disabled: bool
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: Optional[datetime]
@@ -28,7 +35,7 @@ class UserPublic(UserBase):
 class UserUpdate(SQLModel):
     id: Optional[int] = None
     username: Optional[str] = None
-    email: Optional[str] = None
+    email: Optional[EmailStr] = None
     full_name: Optional[str] = None
     disabled: Optional[bool] = None
     created_at: Optional[datetime] = None
