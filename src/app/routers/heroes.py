@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.database import get_session
 from app.models.hero import Hero, HeroCreate, HeroPublic, HeroPublicWithTeam, HeroUpdate
@@ -48,7 +48,7 @@ def update_hero(
     hero_data = hero.model_dump(exclude_unset=True)
     for key, value in hero_data.items():
         setattr(db_hero, key, value)
-    db_hero.updated_at = datetime.now()
+    db_hero.updated_at = datetime.now(timezone.utc)
     session.add(db_hero)
     session.commit()
     session.refresh(db_hero)
@@ -60,7 +60,7 @@ def delete_hero(*, session: Session = Depends(get_session), hero_id: int):
     hero = session.get(Hero, hero_id)
     if not hero | hero.deleted_at is not None:
         raise HTTPException(status_code=404, detail="Hero not found")
-    hero.deleted_at = datetime.now()
+    hero.deleted_at = datetime.now(timezone.utc)
     session.add(hero)
     session.commit()
     return {"ok": True}

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.database import get_session
 from app.models.team import (
@@ -57,7 +57,7 @@ def update_team(
     team_data = team.model_dump(exclude_unset=True)
     for key, value in team_data.items():
         setattr(db_team, key, value)
-    db_team.updated_at = datetime.now()
+    db_team.updated_at = datetime.now(timezone.utc)
     session.add(db_team)
     session.commit()
     session.refresh(db_team)
@@ -69,7 +69,7 @@ def delete_team(*, session: Session = Depends(get_session), team_id: int):
     team = session.get(Team, team_id)
     if not team | team.deleted_at is not None:
         raise HTTPException(status_code=404, detail="Team not found")
-    team.deleted_at = datetime.now()
+    team.deleted_at = datetime.now(timezone.utc)
     session.add(team)
     session.commit()
     return {"ok": True}

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.database import get_session
 from app.models.user import (
@@ -56,7 +56,7 @@ def update_user(
     user_data = user.model_dump(exclude_unset=True)
     for key, value in user_data.items():
         setattr(db_user, key, value)
-    db_user.updated_at = datetime.now()
+    db_user.updated_at = datetime.now(timezone.utc)
     session.add(db_user)
     session.commit()
     session.refresh(db_user)
@@ -68,7 +68,7 @@ def delete_user(*, session: Session = Depends(get_session), user_id: int):
     user = session.get(User, user_id)
     if not user | user.deleted_at is not None:
         raise HTTPException(status_code=404, detail="User not found")
-    user.deleted_at = datetime.now()
+    user.deleted_at = datetime.now(timezone.utc)
     session.add(user)
     session.commit()
     return {"ok": True}

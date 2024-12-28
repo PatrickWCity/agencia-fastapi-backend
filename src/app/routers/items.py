@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.database import get_session
 from app.models.item import (
@@ -56,7 +56,7 @@ def update_item(
     item_data = item.model_dump(exclude_unset=True)
     for key, value in item_data.items():
         setattr(db_item, key, value)
-    db_item.updated_at = datetime.now()
+    db_item.updated_at = datetime.now(timezone.utc)
     session.add(db_item)
     session.commit()
     session.refresh(db_item)
@@ -68,7 +68,7 @@ def delete_item(*, session: Session = Depends(get_session), item_id: int):
     item = session.get(Item, item_id)
     if not item | item.deleted_at is not None:
         raise HTTPException(status_code=404, detail="Item not found")
-    item.deleted_at = datetime.now()
+    item.deleted_at = datetime.now(timezone.utc)
     session.add(item)
     session.commit()
     return {"ok": True}
