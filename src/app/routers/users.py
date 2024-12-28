@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
+from datetime import datetime
 
 from app.database import get_session
 from app.models.user import (
@@ -28,14 +29,16 @@ def read_users(
     offset: int = 0,
     limit: int = Query(default=100, le=100),
 ):
-    users = session.exec(select(User).offset(offset).limit(limit)).all()
+    users = session.exec(
+        select(User).where(User.deleted_at is None).offset(offset).limit(limit)
+    ).all()
     return users
 
 
 @router.get("/users/{user_id}", response_model=UserPublic, tags=["users"])
 def read_user(*, user_id: int, session: Session = Depends(get_session)):
     user = session.get(User, user_id)
-    if not user:
+    if not user | user.deleted_at is not None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
@@ -48,11 +51,12 @@ def update_user(
     user: UserUpdate,
 ):
     db_user = session.get(User, user_id)
-    if not db_user:
+    if not db_user | db_user.deleted_at is not None:
         raise HTTPException(status_code=404, detail="User not found")
     user_data = user.model_dump(exclude_unset=True)
     for key, value in user_data.items():
         setattr(db_user, key, value)
+    db_user.updated_at = datetime.now()
     session.add(db_user)
     session.commit()
     session.refresh(db_user)
@@ -62,8 +66,9 @@ def update_user(
 @router.delete("/users/{user_id}", tags=["users"])
 def delete_user(*, session: Session = Depends(get_session), user_id: int):
     user = session.get(User, user_id)
-    if not user:
+    if not user | user.deleted_at is not None:
         raise HTTPException(status_code=404, detail="User not found")
-    session.delete(user)
+    user.deleted_at = datetime.now()
+    session.add(user)
     session.commit()
     return {"ok": True}

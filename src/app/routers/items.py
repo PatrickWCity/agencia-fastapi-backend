@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
+from datetime import datetime
 
 from app.database import get_session
 from app.models.item import (
@@ -28,14 +29,16 @@ def read_items(
     offset: int = 0,
     limit: int = Query(default=100, le=100),
 ):
-    items = session.exec(select(Item).offset(offset).limit(limit)).all()
+    items = session.exec(
+        select(Item).where(Item.deleted_at is None).offset(offset).limit(limit)
+    ).all()
     return items
 
 
 @router.get("/items/{item_id}", response_model=ItemPublic, tags=["items"])
 def read_item(*, item_id: int, session: Session = Depends(get_session)):
     item = session.get(Item, item_id)
-    if not item:
+    if not item | item.deleted_at is not None:
         raise HTTPException(status_code=404, detail="Item not found")
     return item
 
@@ -48,11 +51,12 @@ def update_item(
     item: ItemUpdate,
 ):
     db_item = session.get(Item, item_id)
-    if not db_item:
+    if not db_item | db_item.deleted_at is not None:
         raise HTTPException(status_code=404, detail="Item not found")
     item_data = item.model_dump(exclude_unset=True)
     for key, value in item_data.items():
         setattr(db_item, key, value)
+    db_item.updated_at = datetime.now()
     session.add(db_item)
     session.commit()
     session.refresh(db_item)
@@ -62,8 +66,9 @@ def update_item(
 @router.delete("/items/{item_id}", tags=["items"])
 def delete_item(*, session: Session = Depends(get_session), item_id: int):
     item = session.get(Item, item_id)
-    if not item:
+    if not item | item.deleted_at is not None:
         raise HTTPException(status_code=404, detail="Item not found")
-    session.delete(item)
+    item.deleted_at = datetime.now()
+    session.add(item)
     session.commit()
     return {"ok": True}

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
+from datetime import datetime
 
 from app.database import get_session
 from app.models.team import (
@@ -29,14 +30,16 @@ def read_teams(
     offset: int = 0,
     limit: int = Query(default=100, le=100),
 ):
-    teams = session.exec(select(Team).offset(offset).limit(limit)).all()
+    teams = session.exec(
+        select(Team).where(Team.deleted_at is None).offset(offset).limit(limit)
+    ).all()
     return teams
 
 
 @router.get("/teams/{team_id}", response_model=TeamPublicWithHeroes, tags=["teams"])
 def read_team(*, team_id: int, session: Session = Depends(get_session)):
     team = session.get(Team, team_id)
-    if not team:
+    if not team | team.deleted_at is not None:
         raise HTTPException(status_code=404, detail="Team not found")
     return team
 
@@ -49,11 +52,12 @@ def update_team(
     team: TeamUpdate,
 ):
     db_team = session.get(Team, team_id)
-    if not db_team:
+    if not db_team | db_team.deleted_at is not None:
         raise HTTPException(status_code=404, detail="Team not found")
     team_data = team.model_dump(exclude_unset=True)
     for key, value in team_data.items():
         setattr(db_team, key, value)
+    db_team.updated_at = datetime.now()
     session.add(db_team)
     session.commit()
     session.refresh(db_team)
@@ -63,8 +67,9 @@ def update_team(
 @router.delete("/teams/{team_id}", tags=["teams"])
 def delete_team(*, session: Session = Depends(get_session), team_id: int):
     team = session.get(Team, team_id)
-    if not team:
+    if not team | team.deleted_at is not None:
         raise HTTPException(status_code=404, detail="Team not found")
-    session.delete(team)
+    team.deleted_at = datetime.now()
+    session.add(team)
     session.commit()
     return {"ok": True}
