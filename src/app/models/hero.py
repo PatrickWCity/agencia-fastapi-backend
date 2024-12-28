@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 
 from ..config import Settings
 from pydantic_core import MultiHostUrl
+from typing import Optional, List
 
 
 class TeamBase(SQLModel):
@@ -12,9 +13,9 @@ class TeamBase(SQLModel):
 
 
 class Team(TeamBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    heroes: list["Hero"] = Relationship(back_populates="team")
+    heroes: List["Hero"] = Relationship(back_populates="team")
 
 
 class TeamCreate(TeamBase):
@@ -26,23 +27,23 @@ class TeamPublic(TeamBase):
 
 
 class TeamUpdate(SQLModel):
-    id: int | None = None
-    name: str | None = None
-    headquarters: str | None = None
+    id: Optional[int] = None
+    name: Optional[str] = None
+    headquarters: Optional[str] = None
 
 
 class HeroBase(SQLModel):
     name: str = Field(index=True, max_length=255)
     secret_name: str
-    age: int | None = Field(default=None, index=True)
+    age: Optional[int] = Field(default=None, index=True)
 
-    team_id: int | None = Field(default=None, foreign_key="team.id")
+    team_id: Optional[int] = Field(default=None, foreign_key="team.id")
 
 
 class Hero(HeroBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    team: Team | None = Relationship(back_populates="heroes")
+    team: Optional["Team"] = Relationship(back_populates="heroes")
 
 
 class HeroPublic(HeroBase):
@@ -54,14 +55,14 @@ class HeroCreate(HeroBase):
 
 
 class HeroUpdate(SQLModel):
-    name: str | None = None
-    secret_name: str | None = None
-    age: int | None = None
-    team_id: int | None = None
+    name: Optional[str] = None
+    secret_name: Optional[str] = None
+    age: Optional[int] = None
+    team_id: Optional[int] = None
 
 
 class HeroPublicWithTeam(HeroPublic):
-    team: TeamPublic | None = None
+    team: Optional[TeamPublic] = None
 
 
 class TeamPublicWithHeroes(TeamPublic):
@@ -74,7 +75,7 @@ url = str(
     MultiHostUrl.build(
         scheme=settings.db_connection,
         host=settings.db_host,
-        port=settings.db_port or None,
+        port=settings.db_port | None,
         path=settings.db_database,
         username=settings.db_username,
         password=settings.db_password,
