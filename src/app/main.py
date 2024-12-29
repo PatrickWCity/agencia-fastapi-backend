@@ -8,6 +8,8 @@ from app.routers import items, users, heroes, teams, categories
 from app.database import create_db_and_tables
 from app.models.user import User
 from app.models.item import Item
+from app.models.power import Power
+from app.models.weapon import Weapon
 from app.models.hero import Hero
 from app.models.team import Team
 from app.models.category import Category
