@@ -30,7 +30,7 @@ def read_users(
     limit: int = Query(default=100, le=100),
 ):
     users = session.exec(
-        select(User).where(User.deleted_at is None).offset(offset).limit(limit)
+        select(User).where(User.deleted_at == None).offset(offset).limit(limit)
     ).all()
     return users
 
@@ -38,7 +38,7 @@ def read_users(
 @router.get("/users/{user_id}", response_model=UserPublic, tags=["users"])
 def read_user(*, user_id: int, session: Session = Depends(get_session)):
     user = session.get(User, user_id)
-    if not user | user.deleted_at is not None:
+    if not user or user.deleted_at != None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
@@ -51,7 +51,7 @@ def update_user(
     user: UserUpdate,
 ):
     db_user = session.get(User, user_id)
-    if not db_user | db_user.deleted_at is not None:
+    if not db_user or db_user.deleted_at != None:
         raise HTTPException(status_code=404, detail="User not found")
     user_data = user.model_dump(exclude_unset=True)
     for key, value in user_data.items():
@@ -66,7 +66,7 @@ def update_user(
 @router.delete("/users/{user_id}", tags=["users"])
 def delete_user(*, session: Session = Depends(get_session), user_id: int):
     user = session.get(User, user_id)
-    if not user | user.deleted_at is not None:
+    if not user or user.deleted_at != None:
         raise HTTPException(status_code=404, detail="User not found")
     user.deleted_at = datetime.now(timezone.utc)
     session.add(user)

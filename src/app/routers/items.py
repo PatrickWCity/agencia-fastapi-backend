@@ -30,7 +30,7 @@ def read_items(
     limit: int = Query(default=100, le=100),
 ):
     items = session.exec(
-        select(Item).where(Item.deleted_at is None).offset(offset).limit(limit)
+        select(Item).where(Item.deleted_at == None).offset(offset).limit(limit)
     ).all()
     return items
 
@@ -38,7 +38,7 @@ def read_items(
 @router.get("/items/{item_id}", response_model=ItemPublic, tags=["items"])
 def read_item(*, item_id: int, session: Session = Depends(get_session)):
     item = session.get(Item, item_id)
-    if not item | item.deleted_at is not None:
+    if not item or item.deleted_at != None:
         raise HTTPException(status_code=404, detail="Item not found")
     return item
 
@@ -51,7 +51,7 @@ def update_item(
     item: ItemUpdate,
 ):
     db_item = session.get(Item, item_id)
-    if not db_item | db_item.deleted_at is not None:
+    if not db_item or db_item.deleted_at != None:
         raise HTTPException(status_code=404, detail="Item not found")
     item_data = item.model_dump(exclude_unset=True)
     for key, value in item_data.items():
@@ -66,7 +66,7 @@ def update_item(
 @router.delete("/items/{item_id}", tags=["items"])
 def delete_item(*, session: Session = Depends(get_session), item_id: int):
     item = session.get(Item, item_id)
-    if not item | item.deleted_at is not None:
+    if not item or item.deleted_at != None:
         raise HTTPException(status_code=404, detail="Item not found")
     item.deleted_at = datetime.now(timezone.utc)
     session.add(item)

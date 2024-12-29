@@ -31,7 +31,7 @@ def read_teams(
     limit: int = Query(default=100, le=100),
 ):
     teams = session.exec(
-        select(Team).where(Team.deleted_at is None).offset(offset).limit(limit)
+        select(Team).where(Team.deleted_at == None).offset(offset).limit(limit)
     ).all()
     return teams
 
@@ -39,7 +39,7 @@ def read_teams(
 @router.get("/teams/{team_id}", response_model=TeamPublicWithHeroes, tags=["teams"])
 def read_team(*, team_id: int, session: Session = Depends(get_session)):
     team = session.get(Team, team_id)
-    if not team | team.deleted_at is not None:
+    if not team or team.deleted_at != None:
         raise HTTPException(status_code=404, detail="Team not found")
     return team
 
@@ -52,7 +52,7 @@ def update_team(
     team: TeamUpdate,
 ):
     db_team = session.get(Team, team_id)
-    if not db_team | db_team.deleted_at is not None:
+    if not db_team or db_team.deleted_at != None:
         raise HTTPException(status_code=404, detail="Team not found")
     team_data = team.model_dump(exclude_unset=True)
     for key, value in team_data.items():
@@ -67,7 +67,7 @@ def update_team(
 @router.delete("/teams/{team_id}", tags=["teams"])
 def delete_team(*, session: Session = Depends(get_session), team_id: int):
     team = session.get(Team, team_id)
-    if not team | team.deleted_at is not None:
+    if not team or team.deleted_at != None:
         raise HTTPException(status_code=404, detail="Team not found")
     team.deleted_at = datetime.now(timezone.utc)
     session.add(team)

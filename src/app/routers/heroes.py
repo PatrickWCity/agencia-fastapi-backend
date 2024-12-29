@@ -25,7 +25,7 @@ def read_heroes(
     limit: int = Query(default=100, le=100),
 ):
     heroes = session.exec(
-        select(Hero).where(Hero.deleted_at is None).offset(offset).limit(limit)
+        select(Hero).where(Hero.deleted_at == None).offset(offset).limit(limit)
     ).all()
     return heroes
 
@@ -33,7 +33,7 @@ def read_heroes(
 @router.get("/heroes/{hero_id}", response_model=HeroPublicWithTeam, tags=["heroes"])
 def read_hero(*, session: Session = Depends(get_session), hero_id: int):
     hero = session.get(Hero, hero_id)
-    if not hero | hero.deleted_at is not None:
+    if not hero or hero.deleted_at != None:
         raise HTTPException(status_code=404, detail="Hero not found")
     return hero
 
@@ -43,7 +43,7 @@ def update_hero(
     *, session: Session = Depends(get_session), hero_id: int, hero: HeroUpdate
 ):
     db_hero = session.get(Hero, hero_id)
-    if not db_hero | db_hero.deleted_at is not None:
+    if not db_hero or db_hero.deleted_at != None:
         raise HTTPException(status_code=404, detail="Hero not found")
     hero_data = hero.model_dump(exclude_unset=True)
     for key, value in hero_data.items():
@@ -58,7 +58,7 @@ def update_hero(
 @router.delete("/heroes/{hero_id}", tags=["heroes"])
 def delete_hero(*, session: Session = Depends(get_session), hero_id: int):
     hero = session.get(Hero, hero_id)
-    if not hero | hero.deleted_at is not None:
+    if not hero or hero.deleted_at != None:
         raise HTTPException(status_code=404, detail="Hero not found")
     hero.deleted_at = datetime.now(timezone.utc)
     session.add(hero)
