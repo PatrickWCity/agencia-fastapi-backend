@@ -71,6 +71,14 @@ def delete_hero(*, session: Session = Depends(get_session), hero_id: int):
     if not hero or hero.deleted_at != None:
         raise HTTPException(status_code=404, detail="Hero not found")
     hero.deleted_at = datetime.now(timezone.utc)
+    if hero.team or hero.weapon:
+        hero.team_id = None
+        hero.weapon_id = None
+        hero.updated_at = datetime.now(timezone.utc)
+    for db_power in hero.powers:
+        db_power.updated_at = datetime.now(timezone.utc)
+        session.add(db_power)
+    hero.powers.clear()
     session.add(hero)
     session.commit()
     return {"ok": True}
