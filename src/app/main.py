@@ -3,7 +3,7 @@ from fastapi import Depends, FastAPI
 
 from app.dependencies import get_query_token, get_token_header
 from app.internal import admin
-from app.routers import items, users, heroes, teams
+from app.routers import items, users, heroes, teams, categories
 
 from app.database import create_db_and_tables
 from app.models.user import User
@@ -25,6 +25,7 @@ app.include_router(users.router)
 app.include_router(items.router)
 app.include_router(heroes.router)
 app.include_router(teams.router)
+app.include_router(categories.router)
 app.include_router(
     admin.router,
     prefix="/admin",
