@@ -70,6 +70,10 @@ def delete_team(*, session: Session = Depends(get_session), team_id: int):
     if not team or team.deleted_at != None:
         raise HTTPException(status_code=404, detail="Team not found")
     team.deleted_at = datetime.now(timezone.utc)
+    for db_hero in team.heroes:
+        db_hero.updated_at = datetime.now(timezone.utc)
+        session.add(db_hero)
+    team.heroes.clear()
     session.add(team)
     session.commit()
     return {"ok": True}
