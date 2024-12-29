@@ -11,9 +11,16 @@ class TeamBase(SQLModel):
     headquarters: str = Field(
         max_length=255, description="The headquarters of the team"
     )
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: Optional[datetime]
-    deleted_at: Optional[datetime]
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="The timestamp when the team was created",
+    )
+    updated_at: Optional[datetime] = Field(
+        description="The timestamp when the team was updated"
+    )
+    deleted_at: Optional[datetime] = Field(
+        description="The timestamp when the team was deleted"
+    )
 
 
 class Team(TeamBase, table=True):

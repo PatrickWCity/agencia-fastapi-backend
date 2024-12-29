@@ -12,9 +12,16 @@ class HeroBase(SQLModel):
     age: Optional[int] = Field(
         default=None, index=True, description="The age of the hero"
     )
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: Optional[datetime]
-    deleted_at: Optional[datetime]
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="The timestamp when the hero was created",
+    )
+    updated_at: Optional[datetime] = Field(
+        description="The timestamp when the hero was updated"
+    )
+    deleted_at: Optional[datetime] = Field(
+        description="The timestamp when the hero was deleted"
+    )
 
     team_id: Optional[int] = Field(default=None, foreign_key="team.id")
 

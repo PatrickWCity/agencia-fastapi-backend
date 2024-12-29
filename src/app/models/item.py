@@ -5,9 +5,16 @@ from sqlmodel import Field, SQLModel
 
 class ItemBase(SQLModel):
     name: str = Field(index=True, max_length=255, description="The name of the item")
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: Optional[datetime]
-    deleted_at: Optional[datetime]
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="The timestamp when the item was created",
+    )
+    updated_at: Optional[datetime] = Field(
+        description="The timestamp when the item was updated"
+    )
+    deleted_at: Optional[datetime] = Field(
+        description="The timestamp when the item was deleted"
+    )
 
 
 class Item(ItemBase, table=True):
