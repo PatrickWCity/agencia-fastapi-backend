@@ -3,7 +3,13 @@ from sqlmodel import Session, select
 from datetime import datetime, timezone
 
 from app.database import get_session
-from app.models.hero import Hero, HeroCreate, HeroPublic, HeroPublicWithTeam, HeroUpdate
+from app.models.hero import (
+    Hero,
+    HeroCreate,
+    HeroPublic,
+    HeroPublicWithPowersTeamWeapon,
+    HeroUpdate,
+)
 
 router = APIRouter()
 
@@ -30,7 +36,11 @@ def read_heroes(
     return heroes
 
 
-@router.get("/heroes/{hero_id}", response_model=HeroPublicWithTeam, tags=["heroes"])
+@router.get(
+    "/heroes/{hero_id}",
+    response_model=HeroPublicWithPowersTeamWeapon,
+    tags=["heroes"],
+)
 def read_hero(*, session: Session = Depends(get_session), hero_id: int):
     hero = session.get(Hero, hero_id)
     if not hero or hero.deleted_at != None:
