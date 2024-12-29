@@ -21,12 +21,12 @@ class Item(ItemBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
 
-class ItemCreate(ItemBase):
-    pass
-
-
 class ItemPublic(ItemBase):
     id: int
+
+
+class ItemCreate(ItemBase):
+    pass
 
 
 class ItemUpdate(SQLModel):

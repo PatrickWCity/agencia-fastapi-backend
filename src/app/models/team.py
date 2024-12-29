@@ -29,12 +29,12 @@ class Team(TeamBase, table=True):
     heroes: List["Hero"] = Relationship(back_populates="team")
 
 
-class TeamCreate(TeamBase):
-    pass
-
-
 class TeamPublic(TeamBase):
     id: int
+
+
+class TeamCreate(TeamBase):
+    pass
 
 
 class TeamUpdate(SQLModel):

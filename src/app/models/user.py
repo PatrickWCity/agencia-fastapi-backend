@@ -31,12 +31,12 @@ class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
 
-class UserCreate(UserBase):
-    pass
-
-
 class UserPublic(UserBase):
     id: int
+
+
+class UserCreate(UserBase):
+    pass
 
 
 class UserUpdate(SQLModel):
