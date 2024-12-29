@@ -10,6 +10,7 @@ from app.models.user import User
 from app.models.item import Item
 from app.models.hero import Hero
 from app.models.team import Team
+from app.models.category import Category
 
 
 @asynccontextmanager
