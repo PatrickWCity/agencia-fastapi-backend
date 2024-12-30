@@ -7,6 +7,7 @@ from app.models.user import (
     User,
     UserCreate,
     UserPublic,
+    UserPublicWithItems,
     UserUpdate,
 )
 
@@ -35,7 +36,7 @@ def read_users(
     return users
 
 
-@router.get("/users/{user_id}", response_model=UserPublic, tags=["users"])
+@router.get("/users/{user_id}", response_model=UserPublicWithItems, tags=["users"])
 def read_user(*, user_id: int, session: Session = Depends(get_session)):
     user = session.get(User, user_id)
     if not user or user.deleted_at != None:
@@ -69,6 +70,7 @@ def delete_user(*, session: Session = Depends(get_session), user_id: int):
     if not user or user.deleted_at != None:
         raise HTTPException(status_code=404, detail="User not found")
     user.deleted_at = datetime.now(timezone.utc)
+    user.items.clear()
     session.add(user)
     session.commit()
     return {"ok": True}

@@ -7,6 +7,7 @@ from app.models.item import (
     Item,
     ItemCreate,
     ItemPublic,
+    ItemPublicWithUsers,
     ItemUpdate,
 )
 
@@ -35,7 +36,7 @@ def read_items(
     return items
 
 
-@router.get("/items/{item_id}", response_model=ItemPublic, tags=["items"])
+@router.get("/items/{item_id}", response_model=ItemPublicWithUsers, tags=["items"])
 def read_item(*, item_id: int, session: Session = Depends(get_session)):
     item = session.get(Item, item_id)
     if not item or item.deleted_at != None:
@@ -69,6 +70,7 @@ def delete_item(*, session: Session = Depends(get_session), item_id: int):
     if not item or item.deleted_at != None:
         raise HTTPException(status_code=404, detail="Item not found")
     item.deleted_at = datetime.now(timezone.utc)
+    item.users.clear()
     session.add(item)
     session.commit()
     return {"ok": True}
