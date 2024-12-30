@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, List, Optional
+from pydantic.json_schema import SkipJsonSchema
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -8,22 +9,22 @@ if TYPE_CHECKING:
 
 class WeaponBase(SQLModel):
     name: str = Field(index=True, max_length=255, description="The name of the weapon")
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+    created_at: SkipJsonSchema[datetime] = Field(
+        default=datetime.now(timezone.utc),
         description="The timestamp when the weapon was created",
     )
-    updated_at: Optional[datetime] = Field(
-        description="The timestamp when the weapon was updated"
+    updated_at: SkipJsonSchema[Optional[datetime]] = Field(
+        default=None, description="The timestamp when the weapon was updated"
     )
-    deleted_at: Optional[datetime] = Field(
-        description="The timestamp when the weapon was deleted"
+    deleted_at: SkipJsonSchema[Optional[datetime]] = Field(
+        default=None, description="The timestamp when the weapon was deleted"
     )
 
 
 class Weapon(WeaponBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
-    heroes: Optional["Hero"] = Relationship(back_populates="weapon")
+    heroes: List["Hero"] = Relationship(back_populates="weapon")
 
 
 class WeaponPublic(WeaponBase):
@@ -37,9 +38,6 @@ class WeaponCreate(WeaponBase):
 class WeaponUpdate(SQLModel):
     id: Optional[int] = None
     name: Optional[str] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    deleted_at: Optional[datetime] = None
 
 
 class WeaponPublicWithHeroes(WeaponPublic):

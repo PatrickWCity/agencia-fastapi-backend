@@ -1,5 +1,6 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import List, Optional
 from datetime import datetime, timezone
+from pydantic.json_schema import SkipJsonSchema
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -7,15 +8,15 @@ class CategoryBase(SQLModel):
     name: str = Field(
         index=True, max_length=255, description="The name of the category"
     )
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+    created_at: SkipJsonSchema[datetime] = Field(
+        default=datetime.now(timezone.utc),
         description="The timestamp when the category was created",
     )
-    updated_at: Optional[datetime] = Field(
-        description="The timestamp when the category was updated"
+    updated_at: SkipJsonSchema[Optional[datetime]] = Field(
+        default=None, description="The timestamp when the category was updated"
     )
-    deleted_at: Optional[datetime] = Field(
-        description="The timestamp when the category was deleted"
+    deleted_at: SkipJsonSchema[Optional[datetime]] = Field(
+        default=None, description="The timestamp when the category was deleted"
     )
 
     category_id: Optional[int] = Field(default=None, foreign_key="category.id")
@@ -41,9 +42,6 @@ class CategoryCreate(CategoryBase):
 class CategoryUpdate(SQLModel):
     id: Optional[int] = None
     name: Optional[str] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    deleted_at: Optional[datetime] = None
 
     category_id: Optional[int] = None
 

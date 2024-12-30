@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Optional, List
 from datetime import datetime, timezone
+from pydantic.json_schema import SkipJsonSchema
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -14,15 +15,15 @@ class HeroBase(SQLModel):
     age: Optional[int] = Field(
         default=None, index=True, description="The age of the hero"
     )
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+    created_at: SkipJsonSchema[datetime] = Field(
+        default=datetime.now(timezone.utc),
         description="The timestamp when the hero was created",
     )
-    updated_at: Optional[datetime] = Field(
-        description="The timestamp when the hero was updated"
+    updated_at: SkipJsonSchema[Optional[datetime]] = Field(
+        default=None, description="The timestamp when the hero was updated"
     )
-    deleted_at: Optional[datetime] = Field(
-        description="The timestamp when the hero was deleted"
+    deleted_at: SkipJsonSchema[Optional[datetime]] = Field(
+        default=None, description="The timestamp when the hero was deleted"
     )
 
     team_id: Optional[int] = Field(default=None, foreign_key="team.id")
@@ -36,7 +37,7 @@ class Hero(HeroBase, table=True):
 
     weapon: Optional["Weapon"] = Relationship(back_populates="heroes")
 
-    powers: list["Power"] = Relationship(back_populates="hero")
+    powers: List["Power"] = Relationship(back_populates="hero")
 
 
 class HeroPublic(HeroBase):
@@ -51,9 +52,6 @@ class HeroUpdate(SQLModel):
     name: Optional[str] = None
     secret_name: Optional[str] = None
     age: Optional[int] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    deleted_at: Optional[datetime] = None
 
     team_id: Optional[int] = None
     weapon_id: Optional[int] = None

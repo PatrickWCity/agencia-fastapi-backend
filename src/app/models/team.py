@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Optional, List
 from datetime import datetime, timezone
+from pydantic.json_schema import SkipJsonSchema
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -11,15 +12,15 @@ class TeamBase(SQLModel):
     headquarters: str = Field(
         max_length=255, description="The headquarters of the team"
     )
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+    created_at: SkipJsonSchema[datetime] = Field(
+        default=datetime.now(timezone.utc),
         description="The timestamp when the team was created",
     )
-    updated_at: Optional[datetime] = Field(
-        description="The timestamp when the team was updated"
+    updated_at: SkipJsonSchema[Optional[datetime]] = Field(
+        default=None, description="The timestamp when the team was updated"
     )
-    deleted_at: Optional[datetime] = Field(
-        description="The timestamp when the team was deleted"
+    deleted_at: SkipJsonSchema[Optional[datetime]] = Field(
+        default=None, description="The timestamp when the team was deleted"
     )
 
 
@@ -41,9 +42,6 @@ class TeamUpdate(SQLModel):
     id: Optional[int] = None
     name: Optional[str] = None
     headquarters: Optional[str] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    deleted_at: Optional[datetime] = None
 
 
 class TeamPublicWithHeroes(TeamPublic):

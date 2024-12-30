@@ -1,7 +1,7 @@
 from typing import Optional
 from datetime import datetime, timezone
 from pydantic import EmailStr
-from sqlmodel import Field, SQLModel
+from pydantic.json_schema import SkipJsonSchema
 
 
 class UserBase(SQLModel):
@@ -15,15 +15,15 @@ class UserBase(SQLModel):
         index=True, max_length=255, description="The full name of the user"
     )
     disabled: bool
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+    created_at: SkipJsonSchema[datetime] = Field(
+        default=datetime.now(timezone.utc),
         description="The timestamp when the user was created",
     )
-    updated_at: Optional[datetime] = Field(
-        description="The timestamp when the user was updated"
+    updated_at: SkipJsonSchema[Optional[datetime]] = Field(
+        default=None, description="The timestamp when the user was updated"
     )
-    deleted_at: Optional[datetime] = Field(
-        description="The timestamp when the user was deleted"
+    deleted_at: SkipJsonSchema[Optional[datetime]] = Field(
+        default=None, description="The timestamp when the user was deleted"
     )
 
 
@@ -45,6 +45,5 @@ class UserUpdate(SQLModel):
     email: Optional[EmailStr] = None
     full_name: Optional[str] = None
     disabled: Optional[bool] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    deleted_at: Optional[datetime] = None
+
+
