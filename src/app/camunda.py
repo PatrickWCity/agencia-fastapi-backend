@@ -8,7 +8,7 @@ settings = Settings()
 url = settings.camunda_url
 
 
-def start_process_inst(
+def start_process_inst_by_process_def_key(
     key: str,
     tenant_id: str = None,
     business_key: str = None,
