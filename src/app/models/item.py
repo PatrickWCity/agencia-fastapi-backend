@@ -1,6 +1,12 @@
-from typing import Optional
+from typing import TYPE_CHECKING, List, Optional
 from datetime import datetime, timezone
 from pydantic.json_schema import SkipJsonSchema
+from sqlmodel import Field, Relationship, SQLModel
+
+from app.models.user_item import User_Item
+
+if TYPE_CHECKING:
+    from app.models.user import User, UserPublic
 
 
 class ItemBase(SQLModel):
@@ -20,6 +26,8 @@ class ItemBase(SQLModel):
 class Item(ItemBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
+    users: List["User"] = Relationship(back_populates="items", link_model=User_Item)
+
 
 class ItemPublic(ItemBase):
     id: int
@@ -34,3 +42,12 @@ class ItemUpdate(SQLModel):
     name: Optional[str] = None
 
 
+class ItemPublicWithUsers(ItemPublic):
+    users: List["UserPublic"] = []
+
+
+# fix 'PydanticUndefinedAnnotation: name 'UserPublic' is not defined' error
+# see: https://github.com/tiangolo/sqlmodel/discussions/757
+from app.models.user import UserPublic
+
+ItemPublicWithUsers.model_rebuild()

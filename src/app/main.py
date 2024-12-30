@@ -11,6 +11,7 @@ from app.models.item import Item
 from app.models.power import Power
 from app.models.weapon import Weapon
 from app.models.hero import Hero
+from app.models.user_item import User_Item
 from app.models.team import Team
 from app.models.category import Category
 
