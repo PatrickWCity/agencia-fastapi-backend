@@ -7,7 +7,7 @@ from app.models.item import (
     Item,
     ItemCreate,
     ItemPublic,
-    ItemPublicWithUsers,
+    ItemPublicWithTagsUsers,
     ItemUpdate,
 )
 
@@ -36,7 +36,7 @@ def read_items(
     return items
 
 
-@router.get("/items/{item_id}", response_model=ItemPublicWithUsers, tags=["items"])
+@router.get("/items/{item_id}", response_model=ItemPublicWithTagsUsers, tags=["items"])
 def read_item(*, item_id: int, session: Session = Depends(get_session)):
     item = session.get(Item, item_id)
     if not item or item.deleted_at != None:
