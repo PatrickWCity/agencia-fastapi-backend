@@ -36,7 +36,7 @@ class UserBase(SQLModel):
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
-    items: List["Item"] = Relationship(back_populates="users", link_model=User_Item)
+    items: List["User_Item"] = Relationship(back_populates="user", link_model=User_Item)
 
 
 class UserPublic(UserBase):

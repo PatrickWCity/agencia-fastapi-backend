@@ -26,7 +26,7 @@ class ItemBase(SQLModel):
 class Item(ItemBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
-    users: List["User"] = Relationship(back_populates="items", link_model=User_Item)
+    users: List["User_Item"] = Relationship(back_populates="item", link_model=User_Item)
 
 
 class ItemPublic(ItemBase):
