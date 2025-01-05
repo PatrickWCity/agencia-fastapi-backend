@@ -6,6 +6,7 @@
     "johnpapa.vscode-peacock",
     "ms-azuretools.vscode-docker",
     "qwtel.sqlite-viewer",
-    "sonarsource.sonarlint-vscode"
+    "sonarsource.sonarlint-vscode",
+    "tamasfe.even-better-toml"
   ]
 }
