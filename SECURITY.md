@@ -10,12 +10,12 @@ currently being supported with security updates.
 | Python 3.8+ | :white_check_mark: |
 | Python 3.7  | :x:                |
 
-| Database Version           | Supported          |
-| -------------------------- | ------------------ |
-| Microsoft SQL Server 2012+ | :white_check_mark: |
-| MySQL 5.6+ / MariaDB 10+   | :white_check_mark: |
-| PostgreSQL 9.6+            | :white_check_mark: |
-| SQLite 3.12+               | :white_check_mark: |
+| Database Version           | Supported          | Server Notes                        |
+| -------------------------- | ------------------ | ----------------------------------- |
+| Microsoft SQL Server 2012+ | :white_check_mark: | Works with python3.13-bookworm-slim |
+| MySQL 5.6+ / MariaDB 10+   | :white_check_mark: | Requires python3.13-bookworm        |
+| PostgreSQL 9.6+            | :white_check_mark: | Requires python3.13-bookworm        |
+| SQLite 3.12+               | :white_check_mark: | Works with python3.13-bookworm-slim |
 
 ## Reporting a Vulnerability
 
