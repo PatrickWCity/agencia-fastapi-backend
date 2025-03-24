@@ -3,7 +3,9 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session, SQLModel, create_engine
 from sqlmodel.pool import StaticPool
 
-from src.app.models.hero import Hero, app, get_session
+from app.main import app
+from app.database import get_session
+from app.models.hero import Hero
 
 
 @pytest.fixture(name="session")

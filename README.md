@@ -12,12 +12,12 @@ source .venv/Scripts/activate
 # Sync the project's dependencies with the environment.
 uv sync
 # Run a command in the project environment.
-uv run fastapi dev src/app/main.py
+uv run fastapi dev app/main.py
 ```
 
 Open [http://localhost:8000](http://localhost:8000) with your browser to see the result.
 
-You can start editing the API by modifying `src/app/main.py`. The server auto-updates as you edit the file.
+You can start editing the API by modifying `app/main.py`. The server auto-updates as you edit the file.
 
 ## Learn More
 

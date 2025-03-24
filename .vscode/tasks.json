@@ -35,10 +35,10 @@
     },
     {
       "type": "shell",
-      "command": "uv run fastapi dev src/app/main.py",
+      "command": "uv run fastapi dev app/main.py",
       "problemMatcher": [],
-      "label": "shell: uv run fastapi dev src/app/main.py",
-      "detail": "uv run fastapi dev src/app/main.py",
+      "label": "shell: uv run fastapi dev app/main.py",
+      "detail": "uv run fastapi dev app/main.py",
       "group": {
         "kind": "build",
         "isDefault": true
