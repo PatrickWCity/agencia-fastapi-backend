@@ -3,7 +3,7 @@ name = "agencia-fastapi-backend"
 version = "0.1.0"
 description = "FastAPI project"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "alembic>=1.14.0",
     "fastapi[all]>=0.115.6",

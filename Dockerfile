@@ -1,7 +1,5 @@
-FROM python:3.12-slim
-
-# Install uv.
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+# Use a Python image with uv pre-installed
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 
 # Copy the application into the container.
 COPY . /app
