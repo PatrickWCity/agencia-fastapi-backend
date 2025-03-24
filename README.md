@@ -30,4 +30,11 @@ You can check out [the FastAPI GitHub repository](https://github.com/fastapi/fas
 
 ## Deploy on Docker
 
+```bash
+# Build the Docker image with:
+docker build -t fastapi-app .
+# Run the Docker container locally with:
+docker run -p 8000:80 --name agencia-fastapi-backend fastapi-app
+```
+
 Check out our [FastAPI deployment documentation](https://fastapi.tiangolo.com/deployment/#what-does-deployment-mean) for more details.
